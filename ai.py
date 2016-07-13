@@ -2,14 +2,14 @@
 #coding=utf-8
 #2016-07-13
 #5本のキュウリAI 
-#ver 1.0
-#評価関数を導入
+#ver 1.1
+#ゲームの終盤に向けてスコアを変えるように評価関数を修正
 
 
 def evaluation(nl): #スコアの低いほうが良い
     score = 0
     for i in nl:
-        score += min(i-1,15-i)
+        score += min(i-1,15-i+(7-len(nl)))
     return score
 
 
@@ -25,18 +25,19 @@ def answer(nl, n): #nl:手持ちの数字リスト n:場に出ている数字
     
 
     for i in range(len(nl)-1):
-        if n>nl[i]: #場に出ているほうが大きかったらだめ
+        if n>nl[i+1]: #場に出ているほうが大きかったらだめ
             continue
         else: #もし場に出ている数字以上なら
-            nl_=nl[:i]+nl[i+1:] #1つ取り除いて
+            nl_=nl[:i+1]+nl[i+2:] #1つ取り除いて
             e = evaluation(nl_) #評価関数に入れる
-            print(nl_,e,nl[i])
+            print(nl_,e,nl[i+1])
             if(best_score > e): #もしスコアが良ければ上書き
                 best_nl = nl_
                 best_score = e
-                ret = nl[i]
+                ret = nl[i+1]
 
 #            print("remove"+str(i))
+    print("remove",ret,best_nl)
     return(best_nl,ret)
    
 
