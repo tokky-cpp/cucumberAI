@@ -4,9 +4,10 @@
 #5本のキュウリAI 
 #ver 1.1
 #ゲームの終盤に向けてスコアを変えるように評価関数を修正
+#評価関数をコスト関数に命名変更
 
 
-def evaluation(nl): #スコアの低いほうが良い
+def cost(nl): #コストを計算。低い方が良い。
     score = 0
     for i in nl:
         score += min(i-1,15-i+(7-len(nl)))
@@ -19,9 +20,9 @@ def answer(nl, n): #nl:手持ちの数字リスト n:場に出ている数字
 
     #一番小さいものを出すのをベストにしておく(とりあえず)
     best_nl = nl[1:]
-    best_score = evaluation(nl[1:])
+    min_cost = cost(nl[1:])
     ret = nl[0]
-    print(best_nl,best_score,ret)
+    print(best_nl,min_cost,ret)
     
 
     for i in range(len(nl)-1):
@@ -29,11 +30,11 @@ def answer(nl, n): #nl:手持ちの数字リスト n:場に出ている数字
             continue
         else: #もし場に出ている数字以上なら
             nl_=nl[:i+1]+nl[i+2:] #1つ取り除いて
-            e = evaluation(nl_) #評価関数に入れる
+            e = cost(nl_) #コスト関数に入れる
             print(nl_,e,nl[i+1])
-            if(best_score > e): #もしスコアが良ければ上書き
+            if(min_cost > e): #もしコストが小さければ上書き
                 best_nl = nl_
-                best_score = e
+                min_cost = e
                 ret = nl[i+1]
 
 #            print("remove"+str(i))
